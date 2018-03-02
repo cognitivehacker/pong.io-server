@@ -13,4 +13,6 @@ function onConnect(socket){
   console.log('connect ' + socket.id);
 
   socket.on('disconnect', () => console.log('disconnect ' + socket.id));
+  socket.on('keydown', () => console.log('keydown'));
+
 }

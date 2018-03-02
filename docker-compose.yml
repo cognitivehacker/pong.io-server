@@ -5,7 +5,7 @@ services:
     container_name: pong-io-server
     build: ./
     ports:
-      - 6969:6969 # Socket Port
+      - 3000:3000 # Socket Port
     volumes:
       - ./:/var/www
 

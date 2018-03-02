@@ -14,4 +14,4 @@ RUN apt-get update && apt-get install -y \
 
 RUN rm -fR /usr/local/bin/yarn && npm install -g yarn
 
-CMD npm run start || tail -f /dev/null
+CMD npm run build && npm run start || tail -f /dev/null
