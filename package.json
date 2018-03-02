@@ -1,0 +1,9 @@
+{
+  "name": "pong.io-server",
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "build": "webpack --mode development --config webpack.config.js",
+    "start": "node dist/server.js"
+  }
+}
