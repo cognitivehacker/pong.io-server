@@ -1,27 +1,41 @@
-const server = require('http').createServer();
-const io = require('socket.io')(server, {
-  serveClient: false,
-  wsEngine: 'ws' // uws is not supported since it is a native module
+var io = require("./server")
+
+var ids = [];
+
+io.on('connection', function(socket){
+
+  ids.push(socket.id);
+
+  console.log('a user connected');
+
+  socket.on('playerKeyUp', msg => {
+    let data = JSON.parse(msg)
+    let response = { event: 'keyUp' }
+
+    io.to(data.sid).emit('playerOneMove', response)
+
+    ids.forEach(sid => {
+      if(sid !== data.sid)
+        io.to(sid).emit('playerTwoMove', response)
+    })
+
+  });
+
+  socket.on('playerKeyDown', msg => {
+    let data = JSON.parse(msg)
+    let response = { event: 'keyDown' }
+    io.to(data.sid).emit('playerOneMove', response)
+    ids.forEach(sid => {
+      if(sid !== data.sid)
+        io.to(sid).emit('playerTwoMove', response)
+    })
+  });
+
 });
 
-const port = process.env.PORT || 3000;
+/*
 
-io.on('connect', onConnect);
-server.listen(port, () => console.log('server listening on port ' + port));
-
-
-import eventKeys from "./events/key"
-
-function onConnect(socket){
-
-  console.log('connect ' + socket.id);
-
-  socket.on('disconnect', () => console.log('disconnect ' + socket.id));
-  socket.on('keyDown', (data) => {
-    console.log('keydown', data)
-    io.local.emit('keydown', data)
-  
-  });
-  socket.on('keyUp', () => console.log('keyup'));
-
-}
+1. identificar quem que mandou
+2. emitir movimento como player 1 para ele
+3. emitir movimento para a outra pessoa como player 2
+*/
